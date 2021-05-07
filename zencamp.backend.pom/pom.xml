@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+		<groupId>com.bitozen.zencamp</groupId>
+		<artifactId>zencamp.backend.module</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>zencamp.backend.pom</artifactId>
+	<packaging>pom</packaging>
+	 <modules>
+        <module>zencamp.common.pom</module>
+        <module>zencamp.db.pom</module>
+        <module>zencamp.spring.pom</module>
+        <module>zencamp.sb.pom</module>
+        <module>zencamp.spring.cloud.pom</module>
+        <module>zencamp.axon.pom</module>
+        <module>zencamp.cache.pom</module>
+    </modules>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <swagger.version>2.9.2</swagger.version>
+        <lombok.version>1.18.2</lombok.version>
+        <jackson.version>2.9.8</jackson.version>
+        <javassist.version>3.21.0-GA</javassist.version>
+        <gson.version>2.8.5</gson.version>
+        <guava.version>27.1-jre</guava.version>
+        <groovy.all.version>2.5.6</groovy.all.version>
+        <javers.core.version>5.3.4</javers.core.version>
+        <http.core.version>4.4.10</http.core.version>
+        <http.client.version>4.5.6</http.client.version>
+        <httpmime.version>4.5.6</httpmime.version>
+        <json.path.version>2.4.0</json.path.version>
+    </properties>
+    
+    <dependencies>
+        <!--LOMBOK DEPENDENCIES-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--SWAGGER DEPENDENCIES-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <!--JACKSON DEPENDENCIES-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        
+        <!--JAVASSIST DEPENDECIES-->
+        <dependency>
+            <groupId>javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
+        </dependency>
+        
+        <!--GSON DEPENDENCIES-->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy-all</artifactId>
+            <version>${groovy.all.version}</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>org.javers</groupId>
+            <artifactId>javers-core</artifactId>
+            <version>${javers.core.version}</version>
+        </dependency>
+        <!--HTTP DEPENDENCIES-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpcore</artifactId>
+            <version>${http.core.version}</version>
+        </dependency>        
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${http.client.version}</version>
+        </dependency>        
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>${httpmime.version}</version>
+        </dependency>
+        <!--JSONPATH DEPENDENCIES-->
+         <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>${json.path.version}</version>
+         </dependency>
+		
+    </dependencies>
+</project>
