@@ -11,6 +11,7 @@
 	<properties>
 		<maven.compiler.source>10</maven.compiler.source>
         <maven.compiler.target>10</maven.compiler.target>
+        <lombok.version>1.18.2</lombok.version>
     </properties>
     <dependencies>
         <dependency>
@@ -18,6 +19,13 @@
             <artifactId>zencamp.sb.pom</artifactId>
             <version>${project.version}</version>
             <type>pom</type>
+        </dependency>
+        <!--LOMBOK DEPENDENCIES-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

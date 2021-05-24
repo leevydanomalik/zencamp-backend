@@ -13,6 +13,14 @@
         <maven.compiler.source>10</maven.compiler.source>
         <maven.compiler.target>10</maven.compiler.target>
 		<spring.context.version>5.1.6.RELEASE</spring.context.version>
+		<jasper.report.version>6.8.0</jasper.report.version>
+        <mapdb.version>1.0.6</mapdb.version>
+        <jfreechart.version>1.0.13</jfreechart.version>
+        <jfree.version>1.0.16</jfree.version>
+        <commons.io.version>2.6</commons.io.version>
+        <commons.fileupload.version>1.4</commons.fileupload.version>
+        <google.zxing.version>3.3.3</google.zxing.version>
+        <barcode4j.version>2.0</barcode4j.version>
     </properties>
 	
 	<dependencies>
@@ -84,6 +92,64 @@
             <version>0.9.0</version>
         </dependency>
         
+        <!--JASPER REPORT DEPENDENCIES-->
+        <dependency>
+            <groupId>net.sf.jasperreports</groupId>
+            <artifactId>jasperreports</artifactId>
+            <version>${jasper.report.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mapdb</groupId>
+            <artifactId>mapdb</artifactId>
+            <version>${mapdb.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>jfree</groupId>
+            <artifactId>jfreechart</artifactId>
+            <version>${jfreechart.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jfree</groupId>
+            <artifactId>jcommon</artifactId>
+            <version>${jfree.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons.io.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons.fileupload.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>${google.zxing.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.barcode4j</groupId>
+            <artifactId>barcode4j</artifactId>
+            <version>${barcode4j.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.xmlgraphics</groupId>
+            <artifactId>batik-bridge</artifactId>
+            <version>1.11</version>
+        </dependency> 
         
 	</dependencies>
 
