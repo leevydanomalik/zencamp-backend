@@ -151,6 +151,18 @@
             <version>1.11</version>
         </dependency> 
         
+        <dependency>
+            <groupId>com.zensols.jrtf</groupId>
+            <artifactId>tutego.jrtf</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.1.0</version>
+        </dependency>
+        
 	</dependencies>
 
 	<profiles>
@@ -191,6 +203,20 @@
             </resource>
         </resources>
         <plugins>
+        	<!-- maven-resource-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>jasper</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>jpg</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>xml</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
             <!--maven-compiler-plugin-->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
