@@ -13,44 +13,39 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bitozen.zencamp.backend.common.GenericException;
+import com.bitozen.zencamp.backend.common.type.FileExtention;
 import com.bitozen.zencamp.backend.svc.report.service.ReportService;
 
 @RestController
 @RequestMapping("applicant")
 public class ApplicantCVRESTController {
     
-    private final String CV_JASPER = "CurriculumVitae.jasper";    
+    private final String CV_JASPER = "ZencampBook.jasper";    
 
     @Autowired
     ReportService reportService;
 
-    @RequestMapping(value = "/curriculum.vitae/{appID}",
-            method = RequestMethod.GET,
-            produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<?> generateCV(@PathVariable("appID") String appID) {
+    @ResponseBody
+    @RequestMapping(value = "book.csv", method = RequestMethod.GET,
+            produces = "text/csv")
+    public byte[] generateBookCSV(@RequestParam(value = "reportFormat", required = false) FileExtention reportFormat) throws GenericException {
         Map<String, Object> params = new HashMap<>();
-        params.put("appID", appID);
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ByteArrayOutputStream os;
         reportService.setRptResourcePrefix("/report/");
-        try {
-            os = (ByteArrayOutputStream) reportService.showReportJdbcDataSourceExportToPdfTxtCsvXls(null, CV_JASPER, params);
-        } catch (GenericException ex) {
-            Logger.getLogger(ApplicantCVRESTController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        os = (ByteArrayOutputStream) reportService.showReportJdbcDataSourceExportToPdfTxtCsvXls(FileExtention.CSV, CV_JASPER, params);
 
-        /*validate object*/
         Validate.notNull(os);
 
-        /*get the byte*/
         byte[] datastream = os.toByteArray();
 
-        /*validate object*/
         Validate.notNull(datastream);
 
-        return ResponseEntity.status(HttpStatus.OK).body(datastream);
+        return datastream;
     }
     
 }
