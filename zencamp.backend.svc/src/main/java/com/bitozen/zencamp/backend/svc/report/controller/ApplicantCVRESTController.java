@@ -25,7 +25,8 @@ import com.bitozen.zencamp.backend.svc.report.service.ReportService;
 @RequestMapping("applicant")
 public class ApplicantCVRESTController {
     
-    private final String CV_JASPER = "ZencampBook.jasper";    
+    private final String CV_JASPER = "ZencampBook.jasper";
+    private final String CV_REPORT = "zencampreport.jasper";
 
     @Autowired
     ReportService reportService;
@@ -48,4 +49,29 @@ public class ApplicantCVRESTController {
         return datastream;
     }
     
+    @RequestMapping(value = "/data.loan.offering.letter",
+            method = RequestMethod.GET,
+            produces = "text/csv")
+    public ResponseEntity<?> generateLoanOfferingLetter( @RequestParam(value = "reportFormat", required = false) FileExtention reportFormat) throws GenericException {
+        Map<String, Object> params = new HashMap<>();
+     
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        reportService.setRptResourcePrefix("/report/");
+        try {
+            os = (ByteArrayOutputStream) reportService.showReportJdbcDataSourceExportToPdfTxtCsvXls(FileExtention.CSV, CV_REPORT, params);
+        } catch (GenericException ex) {
+            Logger.getLogger(ApplicantCVRESTController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        Validate.notNull(os);
+
+        
+        byte[] datastream = os.toByteArray();
+
+        
+        Validate.notNull(datastream);
+
+        return ResponseEntity.status(HttpStatus.OK).body(datastream);
+    }
 }
