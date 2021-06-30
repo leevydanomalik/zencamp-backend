@@ -27,6 +27,9 @@ public class ApplicantCVRESTController {
     
     private final String CV_JASPER = "ZencampBook.jasper";
     private final String CV_REPORT = "zencampreport.jasper";
+    private final String CV_REPORTKELAS = "mainReportKelas.jasper";
+    private final String CV_MemoAnggaran = "Memo_Anggaran.jasper";
+    private final String CV_REPORT_DATA_KARYAWAN = "Report_Data_Karyawan.jasper";
 
     @Autowired
     ReportService reportService;
@@ -70,6 +73,84 @@ public class ApplicantCVRESTController {
         byte[] datastream = os.toByteArray();
 
         
+        Validate.notNull(datastream);
+
+        return ResponseEntity.status(HttpStatus.OK).body(datastream);
+    }
+    
+    @RequestMapping(value = "/data.kelas.letter",
+            method = RequestMethod.GET,
+            produces = "text/csv")
+    public ResponseEntity<?> generateDataKelasLetter( @RequestParam(value = "reportFormat", required = false) FileExtention reportFormat) throws GenericException {
+        Map<String, Object> params = new HashMap<>();
+     
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        reportService.setRptResourcePrefix("/report/");
+        try {
+            os = (ByteArrayOutputStream) reportService.showReportJdbcDataSourceExportToPdfTxtCsvXls(FileExtention.CSV, CV_REPORTKELAS, params);
+        } catch (GenericException ex) {
+            Logger.getLogger(ApplicantCVRESTController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        Validate.notNull(os);
+
+        
+        byte[] datastream = os.toByteArray();
+
+        
+        Validate.notNull(datastream);
+
+        return ResponseEntity.status(HttpStatus.OK).body(datastream);
+    }
+    
+    @RequestMapping(value = "/data.memo.anggaran",
+            method = RequestMethod.GET,
+            produces = "text/pdf")
+    public ResponseEntity<?> generateMemoAnggaranLetter( @RequestParam(value = "reportFormat", required = false) FileExtention reportFormat) throws GenericException {
+        Map<String, Object> params = new HashMap<>();
+     
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        reportService.setRptResourcePrefix("/report/");
+        try {
+            os = (ByteArrayOutputStream) reportService.showReportJdbcDataSourceExportToPdfTxtCsvXls(FileExtention.PDF, CV_MemoAnggaran, params);
+        } catch (GenericException ex) {
+            Logger.getLogger(ApplicantCVRESTController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        
+        Validate.notNull(os);
+
+        
+        byte[] datastream = os.toByteArray();
+
+        
+        Validate.notNull(datastream);
+
+        return ResponseEntity.status(HttpStatus.OK).body(datastream);
+    }
+    
+    @RequestMapping(value = "/report.data.karyawan/{directorate}/",
+            method = RequestMethod.GET,
+            produces = "text/vnd.ms-excel")
+    public ResponseEntity<?> generateDataKaryawanReportCSV(@PathVariable("directorate") String directorate) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("directorate", directorate);
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        reportService.setRptResourcePrefix("/report/");
+        try {
+            os = (ByteArrayOutputStream) reportService.showReportJdbcDataSourceExportToPdfTxtCsvXls(FileExtention.XLS, CV_REPORT_DATA_KARYAWAN, params);
+        } catch (GenericException ex) {
+            Logger.getLogger(ApplicantCVRESTController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        /*validate object*/
+        Validate.notNull(os);
+
+        /*get the byte*/
+        byte[] datastream = os.toByteArray();
+
+        /*validate object*/
         Validate.notNull(datastream);
 
         return ResponseEntity.status(HttpStatus.OK).body(datastream);
