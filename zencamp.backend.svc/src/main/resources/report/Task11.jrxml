@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Task11" language="groovy" pageWidth="612" pageHeight="1008" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e2b95572-9def-4525-88bc-cb7454a0a80d">
+	<property name="ireport.zoom" value="1.3310000000000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="240"/>
+	<parameter name="detaseringid" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="uri" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="url" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+		ds.detaseringid as detaseringid,
+		ds.employeename as employeename,
+		ds.employeepositionname as employeepositionname,
+		ds.employeecompanyname as employeecompanyname,
+		cast(ds.detaseringmemo as json) ->> 'detaseringMemoNumber' as detaseringMemoNumber,
+		to_date((cast(ds.detaseringmemo as json) ->> 'createdDate'), 'dd-MM-yyyy') as createdDateMemo,
+		ds.detaseringstartdate as detaseringstartdate,
+		ds.detaseringenddate as detaseringenddate,
+		initcap(ds.detaseringdeparturename)as detaseringdeparturename,
+		initcap(ds.detaseringdestinationname)as detaseringdestinationname,
+		ddapp.empID as ddempid,
+		ddapp.empName as ddempname,
+		ddapp.positionName as ddpositionname,
+		ddapp.esID as ddesid,
+		eoapp.empID as eoempid,
+		eoapp.empName as eoempname,
+		eoapp.positionName as eopositionname,
+		eoapp.esID as eoesid,
+		cast(ds.movementid as json)->> 'movementSKNumber' as sknumber,
+		mv.movementpositionafter as movementpositionafter,
+		mv.movementcompanynameafter as movementcompanynameafter
+	from
+		trx_detaseringqueryentryprojection ds
+	left join (
+	select
+	detoutput.detaseringid,
+	detOutput.memoApprovals,
+	cast(detOutput.memoApprovals->>'employeeApproval' as json)->>'employeeID' empID,
+	cast(detOutput.memoApprovals->>'employeeApproval' as json)->>'employeeName' empName,
+	cast(detOutput.memoApprovals->>'employeeApproval' as json)->>'positionName' positionName,
+	cast(detOutput.memoApprovals->>'employeeApproval' as json)->>'companyID' esID,
+	detOutput.memoApprovals->>'approvalDate' approveDate,
+	detOutput.memoApprovals->>'signatureType' signType
+from
+	(
+		select det.*,
+		memo,
+		json_array_elements(cast(memo->>'detaseringMemoSignatureApprovals' as json)) memoApprovals
+	from
+		trx_detaseringqueryentryprojection det,
+		cast(det.detaseringmemo as json) memo
+	order by
+		id desc) detOutput
+where
+		detOutput.memoApprovals->>'signatureType' = 'DEPUTY_DIRECTOR_APPROVAL'
+	)ddapp on ddapp.detaseringid = ds.detaseringid
+	left join (
+	select
+	detoutput.detaseringid,
+	detOutput.memoApprovals,
+	cast(detOutput.memoApprovals->>'employeeApproval' as json)->>'employeeID' empID,
+	cast(detOutput.memoApprovals->>'employeeApproval' as json)->>'employeeName' empName,
+	cast(detOutput.memoApprovals->>'employeeApproval' as json)->>'positionName' positionName,
+	cast(detOutput.memoApprovals->>'employeeApproval' as json)->>'companyID' esID,
+	detOutput.memoApprovals->>'approvalDate' approveDate,
+	detOutput.memoApprovals->>'signatureType' signType
+from
+	(
+		select det.*,
+		memo,
+		json_array_elements(cast(memo->>'detaseringMemoSignatureApprovals' as json)) memoApprovals
+	from
+		trx_detaseringqueryentryprojection det,
+		cast(det.detaseringmemo as json) memo
+	order by
+		id desc) detOutput
+where
+		detOutput.memoApprovals->>'signatureType' = 'EXECUTIVE_OFFICER_APPROVAL'
+	)eoapp on eoapp.detaseringid = ds.detaseringid
+left join(
+	select
+	tm.movementid,
+	tm.movementpositionafter,
+	tm.movementcompanynameafter
+	from
+	trx_movementqueryentryprojection tm
+)mv on mv.movementid = cast(ds.movementid as json)->> 'movementID'
+	where
+	ds.detaseringid = $P{detaseringid}]]>
+	</queryString>
+	<field name="detaseringid" class="java.lang.String"/>
+	<field name="employeename" class="java.lang.String"/>
+	<field name="employeepositionname" class="java.lang.String"/>
+	<field name="employeecompanyname" class="java.lang.String"/>
+	<field name="detaseringmemonumber" class="java.lang.String"/>
+	<field name="createddatememo" class="java.sql.Date"/>
+	<field name="detaseringstartdate" class="java.sql.Date"/>
+	<field name="detaseringenddate" class="java.sql.Date"/>
+	<field name="detaseringdeparturename" class="java.lang.String"/>
+	<field name="detaseringdestinationname" class="java.lang.String"/>
+	<field name="ddempid" class="java.lang.String"/>
+	<field name="ddempname" class="java.lang.String"/>
+	<field name="ddpositionname" class="java.lang.String"/>
+	<field name="ddesid" class="java.lang.String"/>
+	<field name="eoempid" class="java.lang.String"/>
+	<field name="eoempname" class="java.lang.String"/>
+	<field name="eopositionname" class="java.lang.String"/>
+	<field name="eoesid" class="java.lang.String"/>
+	<field name="sknumber" class="java.lang.String"/>
+	<field name="movementpositionafter" class="java.lang.String"/>
+	<field name="movementcompanynameafter" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="74" splitType="Stretch">
+			<image>
+				<reportElement uuid="890328ad-4e1d-4b97-bdc5-aaaabe81735c" x="1" y="10" width="113" height="40"/>
+				<imageExpression><![CDATA["D:\\File Bitozen\\Zencamp\\Juni\\Hari11\\LogoMemo.PNG"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="9e0d01b9-bd9d-403c-97a8-17fbb1596b4e" x="0" y="50" width="113" height="20"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MEMORANDUM]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="bf0b1880-ec5c-4091-8199-ba829cb977e2" x="0" y="70" width="572" height="1"/>
+				<graphicElement>
+					<pen lineWidth="5.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="163" splitType="Stretch">
+			<line>
+				<reportElement uuid="bf8041e3-aa46-44d3-b0d0-2662c4d95b84" x="0" y="151" width="572" height="1"/>
+				<graphicElement>
+					<pen lineWidth="5.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="2bc910e8-7ffc-4a1a-a873-2408d447ecf9" x="65" y="79" width="10" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fdb395f8-9e05-4097-b607-397bb998e0cb" x="75" y="51" width="368" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{detaseringmemonumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="838c4da4-8fb3-420a-8793-5fe4e117a33f" x="3" y="65" width="62" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Tanggal]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="cd0c8684-287d-41e0-b914-6f2cf53c2921" x="75" y="65" width="368" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{createddatememo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="22ff1bc2-97f0-40ba-b70f-6e08523bc8c5" x="3" y="79" width="62" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Perihal]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="9594ab47-666a-4469-b070-a23fbfadd36a" x="75" y="37" width="368" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Direktorat SDM & Umum"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b6b2fa2f-d883-4cce-9cbd-dd498d99d479" x="65" y="37" width="10" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="823e771d-d58d-42f0-a948-72a7fb4db730" x="3" y="37" width="62" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Dari]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="932976e8-fab6-4ab3-9818-de44e6afdd51" x="75" y="22" width="368" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{employeename}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4863f076-bba3-4ea1-981b-2129b830223c" x="75" y="79" width="368" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fasilitas Detasering"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a54141e3-010e-4502-96c9-634a5819f04b" x="3" y="51" width="62" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Nomor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="65a8e91c-3ec4-4eba-8a32-cf355d20eabd" x="65" y="22" width="10" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7e8feb9a-379d-4f05-9ec9-3b40c1b58af2" x="65" y="51" width="10" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2111d184-0d93-44cd-b7d9-a16b4201114f" x="3" y="22" width="62" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[Kepada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="461b3d9a-d7b0-455d-a1df-6dbe19bd14f1" x="65" y="65" width="10" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="114">
+			<textField>
+				<reportElement uuid="20a74104-113f-4d57-a01a-54e6ad9f98a1" x="1" y="0" width="571" height="114"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
+					<paragraph lineSpacing="1_1_2" leftIndent="3" spacingBefore="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Menunjuk Surat Keputusan No. "+
+($F{sknumber}==null || $F{sknumber}.isEmpty() ? "-":$F{sknumber})+
+" perihal perpanjangan penugasan sementara Saudara sebagai "+
+($F{movementpositionafter}==null||$F{movementpositionafter}.isEmpty()?"":$F{movementpositionafter})+
+" di "+
+($F{movementcompanynameafter}==null||$F{movementcompanynameafter}.isEmpty()?"":$F{movementcompanynameafter})+
+", dengan ini kami sampaikan perpanjangan fasilitas detasering (dari kota asal "+
+($F{detaseringdeparturename}==null||$F{detaseringdeparturename}.isEmpty() ? "-":$F{detaseringdeparturename})+
+" ke "+
+($F{detaseringdestinationname}==null||$F{detaseringdestinationname}.isEmpty()?"-":$F{detaseringdestinationname})+
+") yang diberikan kepada Saudara sebagai berikut:"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="75" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="318fecd9-51f5-49d2-ab5e-55241225a863" x="3" y="11" width="312" height="59"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "report1.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<summary>
+		<band height="364" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6cbd11be-0916-4e94-a9de-63403d13aab5" x="45" y="15" width="20" height="15"/>
+				<textElement verticalAlignment="Middle" markup="styled">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[<li> </li>]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="5464d156-77c0-4d70-8ade-6cc3a7e1f62a" x="5" y="276" width="163" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="9c206a1d-41ea-49d2-82bd-d92c5867b8e2" x="5" y="184" width="45" height="15"/>
+				<textElement verticalAlignment="Top">
+					<paragraph leftIndent="3" spacingBefore="3"/>
+				</textElement>
+				<text><![CDATA[Salam,]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b55fd71c-e4df-4c57-914e-7b0d0673405c" x="213" y="262" width="175" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA[$F{eoempname}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="c474ba59-7097-44de-a028-8ef8a0685466" x="213" y="277" width="175" height="1"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="df4f4998-32c5-45e4-bc88-9c9c8fd320a1" x="5" y="278" width="163" height="30"/>
+				<textElement verticalAlignment="Top" markup="none"/>
+				<textFieldExpression><![CDATA[$F{ddpositionname}== null || $F{ddpositionname}.isEmpty()?"Deputy Director":$F{ddpositionname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fd0ccf37-632c-44b8-b5a1-0087f5932e7d" x="5" y="262" width="163" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA[$F{ddempname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a541018e-cbbd-4c4d-ac6f-1a39964d4c09" x="213" y="278" width="175" height="30"/>
+				<textElement verticalAlignment="Top" markup="none"/>
+				<textFieldExpression><![CDATA[$F{eopositionname}==null||$F{eopositionname}.isEmpty()?"Executive Officer":$F{eopositionname}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7a962261-324e-43be-a131-95da13c2e549" x="1" y="78" width="571" height="15"/>
+				<textElement verticalAlignment="Top">
+					<paragraph leftIndent="3" spacingBefore="3"/>
+				</textElement>
+				<text><![CDATA[Demikian kami sampaikan, terima kasih.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d09b74ca-f1b8-4e15-ba7f-9b536574c984" x="65" y="15" width="385" height="63"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top" markup="none">
+					<paragraph lineSpacing="1_1_2" leftIndent="3" spacingBefore="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pemberian fasilitas ini efektif "+
+($F{detaseringstartdate})+
+" s.d "+
+($F{detaseringenddate})+
+" dan hanya berlaku selama masih bertugas di "+
+($F{movementcompanynameafter})+
+"."]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

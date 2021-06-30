@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a7706718-42f0-49f2-9d79-129940151c74">
+	<property name="ireport.zoom" value="1.7715610000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="detaseringid" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+tunjdetasering.detaseringFacilityBudgetValue::int as tunjdetasering,
+kost.detaseringFacilityBudgetValue::int as kost
+from
+trx_detaseringqueryentryprojection ds
+left join(
+	select
+	ds.detaseringid as detaseringid,
+	ds.detaseringfacilities,
+	json_array_elements(cast(ds.detaseringfacilities as json))::json ->> 'facilityCategoryKey' as facilityCategoryKey,
+	json_array_elements(cast(ds.detaseringfacilities as json))::json ->> 'facilityCategory' as facilityCategory,
+	json_array_elements(cast(ds.detaseringfacilities as json))::json ->> 'facilityTypeKey' as facilityTypeKey,
+	json_array_elements(cast(ds.detaseringfacilities as json))::json ->> 'detaseringNotes' as detaseringNotes,
+	json_array_elements(cast(ds.detaseringfacilities as json))::json ->> 'detaseringFacilityBudgetValue' as detaseringFacilityBudgetValue
+	from
+	trx_detaseringqueryentryprojection ds
+)tunjdetasering on tunjdetasering.detaseringid = ds.detaseringid and tunjdetasering.facilityCategoryKey = 'DT-BUDGET-TYPE-006-CAT-001'
+left join(
+	select
+	ds.detaseringid as detaseringid,
+	ds.detaseringfacilities,
+	json_array_elements(cast(ds.detaseringfacilities as json))::json ->> 'facilityCategoryKey' as facilityCategoryKey,
+	json_array_elements(cast(ds.detaseringfacilities as json))::json ->> 'facilityCategory' as facilityCategory,
+	json_array_elements(cast(ds.detaseringfacilities as json))::json ->> 'facilityTypeKey' as facilityTypeKey,
+	json_array_elements(cast(ds.detaseringfacilities as json))::json ->> 'detaseringNotes' as detaseringNotes,
+	json_array_elements(cast(ds.detaseringfacilities as json))::json ->> 'detaseringFacilityBudgetValue' as detaseringFacilityBudgetValue
+	from
+	trx_detaseringqueryentryprojection ds
+)kost on kost.detaseringid = ds.detaseringid and kost.facilityCategoryKey = 'DT-BUDGET-TYPE-001-CAT-002'
+where
+	ds.detaseringid = $P{detaseringid}]]>
+	</queryString>
+	<field name="tunjdetasering" class="java.lang.Integer"/>
+	<field name="kost" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="46" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="dd6274ac-9784-48ab-848f-5f1291eb518d" stretchType="RelativeToTallestObject" x="1" y="15" width="20" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA["2."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="3b8c2b30-cfbf-4a09-8892-c74222ec4082" stretchType="RelativeToTallestObject" x="21" y="15" width="135" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA["Biaya Kost"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6a268571-2c48-4e5a-9490-dd1052a7cac3" stretchType="RelativeToTallestObject" x="156" y="15" width="10" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="158b8a1f-e592-42eb-862c-2f6cab819467" stretchType="RelativeToTallestObject" x="166" y="0" width="294" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tunjdetasering}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="4be11ace-52d0-4eac-90ec-67442065fca2" stretchType="RelativeToTallestObject" x="1" y="30" width="20" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA["3."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="95679352-2f8d-4538-b387-6a180bbc24cc" stretchType="RelativeToTallestObject" x="156" y="0" width="10" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="13196985-9214-4405-83ba-da24d6ef7f2c" stretchType="RelativeToTallestObject" x="166" y="30" width="294" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tiket Pergi Pulang ke/dari lokasi penugasan"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="39bf6863-ecbc-437b-8cb0-7bfdfcfaaf62" stretchType="RelativeToTallestObject" x="21" y="0" width="135" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA["Tunjangan Detasering"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2a3ac424-1ef7-4149-89ac-65b0224da156" stretchType="RelativeToTallestObject" x="156" y="30" width="10" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0f2b2d49-1861-443b-bfc4-e51a1b1e39c9" stretchType="RelativeToTallestObject" x="21" y="30" width="135" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA["Biaya Transportasi"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="457e7295-35a5-429f-8437-c42ff3fc13bc" stretchType="RelativeToTallestObject" x="166" y="15" width="294" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<paragraph leftIndent="3"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kost}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="019724c4-48fc-43ae-8b60-0f652f7165a7" stretchType="RelativeToTallestObject" x="1" y="0" width="20" height="15"/>
+				<textElement verticalAlignment="Middle" markup="none"/>
+				<textFieldExpression><![CDATA["1."]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

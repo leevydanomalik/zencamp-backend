@@ -1,0 +1,647 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Report Biaya Per Pelatihan" language="groovy" pageWidth="2558" pageHeight="842" orientation="Landscape" columnWidth="2518" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="63c161ee-9226-43fd-81f3-cfde5d730028">
+	<property name="ireport.zoom" value="1.2100000000000106"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="month" class="java.lang.String"/>
+	<parameter name="year" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+ipp2.ipptrxid,
+ipp2.ipptrxempname,
+ipp2.ipptrxpositionname,
+ipp2.ipptrxcompanyname,
+ipp2.ipptype,
+ipp2.ipptrxdocdate,
+ipp2.sasaranscore,
+CASE
+WHEN ipp2.sasaranscore::decimal = 0 OR ipp2.sasaranscore IS NULL THEN '0'
+WHEN ipp2.sasaranscore::decimal <= 50 THEN '1'
+WHEN ipp2.sasaranscore::decimal > 50 AND ipp2.sasaranscore::decimal <= 81 THEN '2'
+WHEN ipp2.sasaranscore::decimal > 81 AND ipp2.sasaranscore::decimal <= 95 THEN '3'
+WHEN ipp2.sasaranscore::decimal > 95 AND ipp2.sasaranscore::decimal <= 100 THEN '4'
+WHEN ipp2.sasaranscore::decimal > 100 AND ipp2.sasaranscore::decimal <= 125 THEN '5'
+WHEN ipp2.sasaranscore::decimal > 125 THEN '6'
+END sasaranrating,
+CASE
+WHEN ipp2.sasaranscore::decimal = 0 OR ipp2.sasaranscore IS NULL THEN 'low'
+WHEN ipp2.sasaranscore::decimal <= 50 THEN 'low'
+WHEN ipp2.sasaranscore::decimal > 50 AND ipp2.sasaranscore::decimal <= 81 THEN 'low'
+WHEN ipp2.sasaranscore::decimal > 81 AND ipp2.sasaranscore::decimal <= 95 THEN 'med'
+WHEN ipp2.sasaranscore::decimal > 95 AND ipp2.sasaranscore::decimal <= 100 THEN 'med'
+WHEN ipp2.sasaranscore::decimal > 100 AND ipp2.sasaranscore::decimal <= 125 THEN 'high'
+WHEN ipp2.sasaranscore::decimal > 125 THEN 'high'
+END kategorikpi,
+ipp2.kompetensiscore,
+CASE
+WHEN ipp2.kompetensiscore::decimal = 0 OR ipp2.kompetensiscore IS NULL THEN '0'
+WHEN ipp2.kompetensiscore::decimal <= 60 THEN '1'
+WHEN ipp2.kompetensiscore::decimal > 60 AND ipp2.kompetensiscore::decimal <= 79 THEN '2'
+WHEN ipp2.kompetensiscore::decimal > 79 AND ipp2.kompetensiscore::decimal <= 95 THEN '3'
+WHEN ipp2.kompetensiscore::decimal > 95 THEN '4'
+END keterangankompetensi,
+CASE
+WHEN ipp2.kompetensiscore::decimal = 0 OR ipp2.kompetensiscore IS NULL THEN 'tidak cakap'
+WHEN ipp2.kompetensiscore::decimal <= 60 THEN 'tidak cakap'
+WHEN ipp2.kompetensiscore::decimal > 60 AND ipp2.kompetensiscore::decimal <= 79 THEN 'kurang cakap'
+WHEN ipp2.kompetensiscore::decimal > 79 AND ipp2.kompetensiscore::decimal <= 95 THEN 'cakap'
+WHEN ipp2.kompetensiscore::decimal > 95 THEN 'cakap'
+END kategorikompetensi,
+ipp2.kedisplinanscore,
+ipp2.penugasanscore,
+ipp2.pagrade,
+ipp2.pascore,
+CASE
+WHEN ipp2.pagrade::decimal = 0 OR ipp2.pagrade IS NULL THEN 'low'
+WHEN ipp2.pagrade::decimal = 1 THEN 'low'
+WHEN ipp2.pagrade::decimal = 2 THEN 'low'
+WHEN ipp2.pagrade::decimal = 3 THEN 'med'
+WHEN ipp2.pagrade::decimal = 4 THEN 'med'
+WHEN ipp2.pagrade::decimal = 5 THEN 'high'
+WHEN ipp2.pagrade::decimal = 6 THEN 'high'
+END kategoripm
+
+
+FROM(
+SELECT
+ipp1.ipptrxid,
+ipp1.ipptrxempname,
+ipp1.ipptrxpositionname,
+ipp1.ipptrxcompanyname,
+ipp1.ipptype,
+ipp1.ipptrxdocdate,
+CAST(ipp1.tpldata AS json) -> 'outputCriteria' ->> 'ippOCVTotalFinalScore' AS sasaranscore,
+CAST(ipp1.tpldata AS json) -> 'processCriteria' ->> 'ippOCVTotalFinalScore' AS kompetensiscore,
+CAST(ipp1.tpldata AS json) -> 'outputAssignmentCriteria' ->> 'ippOCAVTotalFinalScore' AS penugasanscore,
+CAST(ipp1.tpldata AS json) -> 'outputDisciplineCriteria' ->> 'ippOCDVTotalFinalScore' AS kedisplinanscore,
+CAST(ipp1.tpldata AS json) ->> 'paValue' AS pascore,
+CAST(ipp1.tpldata AS json) ->> 'paGrade' AS pagrade
+FROM (
+SELECT
+ipp.ipptrxid,
+ipp.ipptrxempname,
+ipp.ipptrxpositionname,
+ipp.ipptrxcompanyname,
+ipp.ipptrxdocdate,
+CAST(ipp.ipptrxtype AS json) ->> 'bizparValue' AS ipptype,
+CAST(ipp.ipptrxpayload AS json) -> 'ippTPLData' ->> 'contentSection' AS tpldata
+FROM trx_performanceippentryprojection ipp) ipp1
+) ipp2
+WHERE
+to_char(ipp2.ipptrxdocdate, 'MM') = $P{month}
+AND to_char(ipp2.ipptrxdocdate, 'yyyy') = $P{year}]]>
+	</queryString>
+	<field name="ipptrxid" class="java.lang.String"/>
+	<field name="ipptrxempname" class="java.lang.String"/>
+	<field name="ipptrxpositionname" class="java.lang.String"/>
+	<field name="ipptrxcompanyname" class="java.lang.String"/>
+	<field name="ipptype" class="java.lang.String"/>
+	<field name="ipptrxdocdate" class="java.sql.Date"/>
+	<field name="sasaranscore" class="java.lang.String"/>
+	<field name="sasaranrating" class="java.lang.String"/>
+	<field name="kategorikpi" class="java.lang.String"/>
+	<field name="kompetensiscore" class="java.lang.String"/>
+	<field name="keterangankompetensi" class="java.lang.String"/>
+	<field name="kategorikompetensi" class="java.lang.String"/>
+	<field name="kedisplinanscore" class="java.lang.String"/>
+	<field name="penugasanscore" class="java.lang.String"/>
+	<field name="pagrade" class="java.lang.String"/>
+	<field name="pascore" class="java.lang.String"/>
+	<field name="kategoripm" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="43" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="bb044ee9-e211-4c86-888b-ca2ce3277ca2" x="2" y="1" width="29" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="854db1ea-e085-4157-9057-04af789edd0b" x="31" y="1" width="140" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[IPP ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="168db0fb-290b-4489-a8c3-00953f19237f" x="171" y="1" width="218" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[EMPLOYEE NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd7cb891-bccd-4700-9103-6cc9fa2ce56b" x="809" y="1" width="133" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[IPP TYPE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f2017b2a-0fc6-4b00-bd6d-f3d187959974" x="389" y="1" width="215" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[EMPLOYEE POSITION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="20be3f03-df7b-431a-9100-716c301bff95" x="1037" y="1" width="144" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[SASARAN TUJUAN
+SCORE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="50179b79-b54f-40d3-becc-3f39d3271236" x="1879" y="1" width="156" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[PENUGASAN KHUSUS SCORE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="975f12fa-8fd8-467b-a80e-a967a74651ef" x="1393" y="1" width="112" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[KOMPETENSI
+SCORE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e0e53d34-cea3-4232-9dd2-28a087d2ef4c" x="1757" y="1" width="122" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[KEDISIPLINAN SCORE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="007390b0-63ad-420f-9279-637908c44241" x="2035" y="1" width="145" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[PERFORMANCE APPRAISAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0ec9cdad-1191-4200-b805-486a10d48d06" x="604" y="1" width="205" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[DIRECTORATE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="692e5822-b49f-4525-8793-d72dae4394c3" x="942" y="1" width="95" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[PERIODE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="12807f7b-946e-400b-89b0-506c562baae6" x="1181" y="1" width="110" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[SASARAN RATING]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="72549a2a-52e6-4538-9205-3ad9432756f8" x="1291" y="1" width="102" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[KATEGORI KPI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3144f8fb-51a2-40fc-a5ce-e13778c20945" x="1505" y="1" width="126" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[KETERANGAN
+KOMPETENSI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1797d606-e5c0-42c0-8946-8f38275dc88c" x="1631" y="1" width="126" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[KATEGORI
+KOMPETENSI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d8113956-ad41-4dd2-8edc-22691f778d22" x="2180" y="1" width="106" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[RATING]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3a5eec1e-8529-4584-82af-404ee4aaac80" x="2286" y="1" width="106" height="42"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[KATEGORI PM]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement uuid="82888ffd-6f16-46f0-89fd-25c612dbaaf4" x="31" y="0" width="140" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ipptrxid}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="78d90ce0-dfbd-442d-8815-e8ee77125da6" x="2" y="0" width="29" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{COLUMN_COUNT}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7684480c-a9bb-400a-8fdf-6c00d243e1ae" x="171" y="0" width="218" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ipptrxempname}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="2cedd7c1-746b-41fd-8f74-e1b27cd37a03" x="809" y="0" width="133" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ipptype}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="a9578914-a205-4e74-8202-06a3bcd8b1ed" x="389" y="0" width="215" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ipptrxpositionname}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="00cb634f-4b70-4d4f-b5a5-31001ebe3de8" x="1037" y="0" width="144" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sasaranscore}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="006e64a1-eb2f-4d15-a62c-515f40fbfa6b" x="1393" y="0" width="112" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kompetensiscore}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="0edd2964-a555-4120-9d9c-b375cf83b265" x="1879" y="0" width="156" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{penugasanscore}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0" isBlankWhenNull="true">
+				<reportElement uuid="b576739d-6085-4d75-b652-835ab6e779c9" x="1757" y="0" width="122" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kedisplinanscore}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="41968d52-c495-4b2d-b6e3-0f03d899a02c" x="2035" y="0" width="145" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pascore}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="4cf92493-535f-4804-a051-31d3d53e0460" x="604" y="0" width="205" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ipptrxcompanyname}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yy" isBlankWhenNull="true">
+				<reportElement uuid="be663488-de65-4d6d-8ed4-fc44d5f7f737" x="942" y="0" width="95" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ipptrxdocdate}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="aac14fca-cf7e-4f1d-b9ec-f51a57875225" x="1181" y="0" width="110" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sasaranrating}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="be1f3a22-8ca9-4517-958e-0ef0ecea2601" x="1291" y="0" width="102" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kategorikpi}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="505eba04-599a-40a1-a97a-186203ae315d" x="1505" y="0" width="126" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{keterangankompetensi}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="0f8eda14-d9a0-4415-8293-eafb2a069f59" x="1631" y="0" width="126" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kategorikompetensi}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="66f222d3-76d7-4318-b1ec-c58ecbfb90e1" x="2180" y="0" width="106" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pagrade}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dc2a87b0-b415-4b9e-9e9e-224b6d858c3b" x="2286" y="0" width="106" height="25"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{kategoripm}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

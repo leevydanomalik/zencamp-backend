@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportMEMO" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e0eae80e-87b2-41a2-a8b5-f0dcde4704ab">
+	<property name="ireport.zoom" value="1.6105100000000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select *
+from trx_trainingmemoentryprojection
+where id = '2']]>
+	</queryString>
+	<field name="ts_obj_disc" class="java.lang.String"/>
+	<field name="id" class="java.lang.Long"/>
+	<field name="createdby" class="java.lang.String"/>
+	<field name="createddate" class="java.sql.Timestamp"/>
+	<field name="recordid" class="java.lang.String"/>
+	<field name="updatedby" class="java.lang.String"/>
+	<field name="updateddate" class="java.sql.Timestamp"/>
+	<field name="modate" class="java.sql.Date"/>
+	<field name="modirectorat" class="java.lang.String"/>
+	<field name="moid" class="java.lang.String"/>
+	<field name="mokesimpulan" class="java.lang.String"/>
+	<field name="molatarbelakang" class="java.lang.String"/>
+	<field name="monomor" class="java.lang.String"/>
+	<field name="moperihal" class="java.lang.String"/>
+	<field name="mopurpose" class="java.lang.String"/>
+	<field name="mosubdit" class="java.lang.String"/>
+	<field name="motembusan" class="java.lang.String"/>
+	<field name="moto" class="java.lang.String"/>
+	<field name="objectid" class="java.lang.String"/>
+	<field name="motoname" class="java.lang.String"/>
+	<field name="company" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="36" splitType="Stretch"/>
+	</title>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<summary>
+		<band height="300" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="cbd5a797-396e-4738-b4e6-bc68e2ff9dec" x="258" y="147" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Bob K. Sinurat]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ad2eebae-6767-4b7b-af3b-639c7b424a52" x="258" y="33" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Riza Permana & Hananto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="de22c976-058d-4a91-8a24-2c4ad53f6526" x="10" y="10" width="249" height="24"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[MATERI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="00213db9-f75d-4e70-ad90-1e40b34b8d30" x="10" y="147" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Manajemen Kredit Bermasalah]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c49d8d5a-1bc2-4730-8ddf-deed158e8c4f" x="258" y="52" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Rumi K. Wibowo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6012301e-4d2b-4b93-bf42-f1578010b23f" x="10" y="109" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Analisa Neraca Cabang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="81f98a0f-8a2a-4efd-ad58-51c38e3c74e3" x="258" y="90" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Andreas Eka, Ruthy Elisabeth, Ken Martin]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="85731731-8cea-4299-9180-5ae971d65d46" x="10" y="128" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Review Analisa Kredit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="915ee5a5-5564-4500-bf1d-d79fa6e8a6dc" x="10" y="33" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Refreshment Visi-Misi, Nilai BAGI & AGP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="08820f01-0bb2-475c-b359-90af02b6e2d1" x="10" y="71" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Kualifikasi & Fungsi TL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3c691303-ee0d-4f56-aed4-4621c8e67b0e" x="10" y="204" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Developing Sales & Marketing Plan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6dd39a63-6f60-4134-a750-1d23369e1016" x="258" y="10" width="249" height="24"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[FASILITATOR / INSTRUKTUR]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="935ba013-886b-4e72-b72b-803bfa375f5c" x="10" y="166" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Analyzing Sales Business Landscape]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="efab5127-eadd-4a26-ad2c-f0b7fbaaaf30" x="10" y="90" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Refreshment Product Knowledge (Funding, Lending, E-Banking)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1b750f21-1211-48b3-b81c-59f1485790f3" x="258" y="109" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Eksternal, Afiar A./Rocky L.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="02f8ff8e-3e56-4fd7-a2dc-3af701e4e4df" x="258" y="185" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Eksternal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="76aa8276-2ec5-4b31-a508-1981ef214046" x="258" y="128" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Eksternal, Stanley Bojoh]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f6d1a402-aa27-4d60-88f6-68f85eca71b6" x="258" y="166" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Eksternal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e2a3bd8a-58cf-4099-b33d-caee303fe15a" x="258" y="204" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Eksternal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b02fc7fc-afe4-49e4-be83-440769a2f902" x="10" y="185" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Managing Account]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cc5c7d5f-0cc4-4c63-8e7d-23585f06aa9a" x="10" y="52" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Wawasan Kebangsaan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="969a9b0e-75cb-4e37-8d2b-fbe20e4ac069" x="258" y="71" width="249" height="20"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Irna Syarif]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>
